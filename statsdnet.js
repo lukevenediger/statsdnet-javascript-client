@@ -22,6 +22,17 @@ var StatsdnetClient = function (
     if (!targetURL || targetURL === '') {
         throw new Error('Must specify where metrics will be sent to. Parameter: targetURL.');
     }
+
+    /**
+     * Posts a batch of metrics off to the statsd.net server
+     * @param {String} url
+     * @param {Object} payload
+     * @returns {Promise}
+     */
+    var postMetricsToServer = function (url, payload) {
+        return jQuery.post(url, payload);
+    };
+
     rootNamespace = rootNamespace || '';
     pumpIntervalSeconds = pumpIntervalSeconds || 10;
     postFunction = postFunction || postMetricsToServer;
@@ -108,16 +119,6 @@ var StatsdnetClient = function (
             payload.push(me._rootNamespace + '.' + name + ':' + me._gauges[name] + '|g');
         }
         return payload
-    };
-
-    /**
-     * Posts a batch of metrics off to the statsd.net server
-     * @param {String} url
-     * @param {Object} payload
-     * @returns {Promise}
-     */
-    var postMetricsToServer = function (url, payload) {
-        return jQuery.post(url, payload);
     };
 
     /**
